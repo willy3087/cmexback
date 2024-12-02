@@ -23,7 +23,7 @@ app.add_middleware(
 # Inicialização do cliente OpenAI
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-@app.post("/api/suggest", response_model=List[ProductSuggestion])
+@app.post("/api/index", response_model=List[ProductSuggestion])
 async def get_suggestions(product_query: ProductQuery):
     try:
         if len(product_query.query.strip()) < 3:
