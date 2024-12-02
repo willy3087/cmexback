@@ -1,6 +1,6 @@
+import openai
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from openai import OpenAI
 from dotenv import load_dotenv
 import os
 from .models import ProductQuery, ProductSuggestion
@@ -11,21 +11,16 @@ load_dotenv()
 
 app = FastAPI()
 
-origins = [
-    "https://cmexfront-hnq5ruasb-williams-projects-2c392421.vercel.app",
-    # Adicione outros domínios se necessário
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],  # Permite todas as origens temporariamente
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Inicialização do cliente OpenAI
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Configura a chave da API OpenAI
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.post("/api/index", response_model=List[ProductSuggestion])
 async def get_suggestions(product_query: ProductQuery):
@@ -44,8 +39,8 @@ async def get_suggestions(product_query: ProductQuery):
         Responda em formato estruturado, separando NCM e descrição.
         """
 
-        response = client.chat.completions.create(
-            model="gpt-4",  # ou o modelo de sua preferência
+        response = openai.ChatCompletion.create(
+            model="gpt-4",  # Ou o modelo de sua preferência
             messages=[
                 {"role": "system", "content": "Você é um especialista em classificação NCM de produtos."},
                 {"role": "user", "content": prompt}
@@ -56,20 +51,24 @@ async def get_suggestions(product_query: ProductQuery):
 
         # Processa a resposta da API
         content = response.choices[0].message.content
-        
-        # Aqui você precisaria parsear a resposta para extrair NCM e descrição
-        # Este é um exemplo simplificado
+
+        # Exemplo simplificado de parsing da resposta
+        lines = content.strip().split('\n')
+        ncm = lines[0] if len(lines) > 0 else ""
+        description = lines[1] if len(lines) > 1 else ""
+
         suggestions = [
             ProductSuggestion(
-                ncm=content.split('\n')[0],
-                description=content.split('\n')[1] if len(content.split('\n')) > 1 else ""
+                ncm=ncm,
+                description=description
             )
         ]
 
         return suggestions
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Erro ao obter sugestões: {e}")
+        raise HTTPException(status_code=500, detail="Erro ao processar a solicitação.")
 
 @app.get("/health")
 async def health_check():
