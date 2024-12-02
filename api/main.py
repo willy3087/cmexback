@@ -1,22 +1,22 @@
-import openai
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
 from .models import ProductQuery, ProductSuggestion
 from typing import List
+import openai
 
 # Carrega variáveis de ambiente
 load_dotenv()
 
 app = FastAPI()
 
-origins = ["https://cmexfront-willy3087-williams-projects-2c392421.vercel.app",
-        "http://localhost:5173"]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[
+        "https://cmexfront-willy3087-williams-projects-2c392421.vercel.app",
+        "http://localhost:5173",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -25,7 +25,7 @@ app.add_middleware(
 # Configura a chave da API OpenAI
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-@app.post("/sugg", response_model=List[ProductSuggestion])
+@app.post("/api/sugg", response_model=List[ProductSuggestion])
 async def get_suggestions(product_query: ProductQuery):
     try:
         if len(product_query.query.strip()) < 3:
@@ -73,6 +73,6 @@ async def get_suggestions(product_query: ProductQuery):
         print(f"Erro ao obter sugestões: {e}")
         raise HTTPException(status_code=500, detail="Erro ao processar a solicitação.")
 
-@app.get("/hearth")
+@app.get("/health")
 async def health_check():
     return {"status": "healthy"}
