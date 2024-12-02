@@ -13,7 +13,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Permite todas as origens temporariamente
+    allow_origins=["https://cmexfront-hnq5ruasb-williams-projects-2c392421.vercel.app"],  # Permite todas as origens temporariamente
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
