@@ -17,7 +17,8 @@ app.add_middleware(
         "https://cmexfront-git-main-williams-projects-2c392421.vercel.app",
         "https://localhost:5173",
         "https://cmexfront.vercel.app",
-        
+        "https://cmexfront-7lcn3wvoi-williams-projects-2c392421.vercel.app",
+        "http://localhost:3000",
     ],
     allow_credentials=True,
     allow_methods=["*"],
