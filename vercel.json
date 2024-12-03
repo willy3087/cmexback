@@ -1,4 +1,18 @@
 {
+  "crons": [
+    {
+      "path": "api/main.py",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "api/main.py",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "api/main.py",
+      "schedule": "0 0 * * *"
+    }
+  ],
   "build": {
     "src": "api/main.py",
     "use": "@vercel/python"
