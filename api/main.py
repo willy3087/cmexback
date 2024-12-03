@@ -25,7 +25,7 @@ app.add_middleware(
 # Configura a chave da API OpenAI
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-@app.post("/api/sugg", response_model=List[ProductSuggestion])
+@app.post("/", response_model=List[ProductSuggestion])
 async def get_suggestions(product_query: ProductQuery):
     try:
         if len(product_query.query.strip()) < 3:
