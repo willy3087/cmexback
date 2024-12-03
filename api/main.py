@@ -19,6 +19,7 @@ app.add_middleware(
         "https://cmexfront.vercel.app",
         "https://cmexfront-7lcn3wvoi-williams-projects-2c392421.vercel.app",
         "http://localhost:3000",
+        "https://cmexfront-i3tfjaqfx-williams-projects-2c392421.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -26,7 +27,7 @@ app.add_middleware(
 )
 
 # Configura a chave da API OpenAI
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = os.getenv("VITE_OPENAI_API_KEY")
 
 @app.post("/sugg", response_model=List[ProductSuggestion])
 async def get_suggestions(product_query: ProductQuery):
