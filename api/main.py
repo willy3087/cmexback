@@ -14,8 +14,10 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://cmexfront-willy3087-williams-projects-2c392421.vercel.app",
-        "http://localhost:5173",
+        "https://cmexfront-git-main-williams-projects-2c392421.vercel.app",
+        "https://localhost:5173",
+        "https://cmexfront.vercel.app",
+        
     ],
     allow_credentials=True,
     allow_methods=["*"],
